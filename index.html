@@ -129,7 +129,7 @@ h2{font-size:22px;margin:0 0 10px;text-align:center}
 .stat{display:flex;gap:8px}.stat div{flex:1;background:#f3f6ff;border-radius:14px;text-align:center;padding:6px;font-size:14px}.stat b{display:block;font-size:22px}
 .newb{background:#fff7d6;border-radius:14px;padding:8px 12px;margin-top:10px;font-size:16px;animation:pop .6s}
 /* バッジ・ショップ・カレンダー */
-.blist{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.blist{display:block}.bgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px}.btier{font-size:16px;margin:10px 2px 8px}.bpr{display:block;height:6px;background:#e3e8f5;border-radius:3px;margin:5px 4px 2px;overflow:hidden}.bpr i{display:block;height:100%;background:var(--gold)}.badge small{display:block;font-size:11px;color:#888}
 .badge{background:#f3f6ff;border-radius:16px;text-align:center;padding:8px 4px;font-size:12px;line-height:1.4}
 .badge .e{font-size:40px;line-height:1.3;display:block}
 .badge b{display:block;font-size:13px}
@@ -610,28 +610,49 @@ const LINES=[
  {n:'いぬの なかま',s:[['🥚','なぞのたまご'],['🐶','こいぬ'],['🐕','いぬ'],['🐺','オオカミ'],['🐕‍🦺','しょうぼう犬']]},
 ];
 const BADGES=[
-{id:'first',e:'🌱',n:'はじめの いっぽ',d:'はじめてあそんだ'},
-{id:'p_kokugo',e:'📖',n:'こくごパーフェクト',d:'こくごで ぜんもんせいかい'},
-{id:'p_sansu',e:'🔢',n:'さんすうパーフェクト',d:'さんすうで ぜんもんせいかい'},
-{id:'p_rika',e:'🌱',n:'しぜんパーフェクト',d:'いきもの・しぜんで ぜんもんせいかい'},
-{id:'p_shakai',e:'🏠',n:'くらしパーフェクト',d:'まち・くらしで ぜんもんせいかい'},
-{id:'p_mix',e:'🎲',n:'ミックスマスター',d:'ミックスでぜんもんせいかい'},
-{id:'all4',e:'🎒',n:'4きょうかクリア',d:'4きょうか ぜんぶで あそんだ'},
-{id:'combo3',e:'🔥',n:'3コンボ',d:'3もんれんぞくせいかい'},
-{id:'combo5',e:'🌈',n:'5コンボ',d:'5もんれんぞくせいかい'},
-{id:'combo10',e:'☄️',n:'10コンボ',d:'10もんれんぞくせいかい'},
-{id:'high',e:'🚀',n:'ハイスコア',d:'1かいで 200ポイント'},
-{id:'fast',e:'⚡',n:'スピードスター',d:'1かいで 5もん はやおしせいかい'},
-{id:'gold',e:'💰',n:'ゴールドハンター',d:'ゴールドもんだいにせいかい'},
-{id:'review',e:'💪',n:'にがてこくふく',d:'ふくしゅうでぜんもんせいかい'},
-{id:'day3',e:'📅',n:'3日れんぞく',d:'3日つづけてあそんだ'},
-{id:'day7',e:'💮',n:'スタンプ7こ',d:'スタンプを7こあつめた'},
-{id:'ok100',e:'🥉',n:'100もんせいかい',d:'ぜんぶで100もんせいかい'},
-{id:'ok300',e:'🥇',n:'300もんせいかい',d:'ぜんぶで300もんせいかい'},
-{id:'shop',e:'👒',n:'おしゃれさん',d:'きせかえをこうかんした'},
-{id:'dragon',e:'🐉',n:'ドラゴンのあいぼう',d:'でんせつになった'},
-{id:'line2',e:'🎁',n:'2ひきめのなかま',d:'あたらしいたまごをもらった'},
-{id:'alllines',e:'👑',n:'なかまコンプリート',d:'5しゅるいのなかまを ぜんぶそだてた'},
+{id:'first',t:1,e:'🌱',n:'はじめの いっぽ',d:'はじめてあそんだ'},
+{id:'p_kokugo',t:2,e:'📖',n:'こくごパーフェクト',d:'こくごで ぜんもんせいかい'},
+{id:'p_sansu',t:2,e:'🔢',n:'さんすうパーフェクト',d:'さんすうで ぜんもんせいかい'},
+{id:'p_rika',t:2,e:'🌱',n:'しぜんパーフェクト',d:'いきもの・しぜんで ぜんもんせいかい'},
+{id:'p_shakai',t:2,e:'🏠',n:'くらしパーフェクト',d:'まち・くらしで ぜんもんせいかい'},
+{id:'p_mix',t:2,e:'🎲',n:'ミックスマスター',d:'ミックスでぜんもんせいかい'},
+{id:'all4',t:1,e:'🎒',n:'4きょうかクリア',d:'4きょうか ぜんぶで あそんだ'},
+{id:'combo3',t:1,e:'🔥',n:'3コンボ',d:'3もんれんぞくせいかい'},
+{id:'combo5',t:2,e:'🌈',n:'5コンボ',d:'5もんれんぞくせいかい'},
+{id:'combo10',t:2,e:'☄️',n:'10コンボ',d:'10もんれんぞくせいかい',p:()=>[bestCombo(),10]},
+{id:'high',t:2,e:'🚀',n:'ハイスコア',d:'1かいで 200ポイント'},
+{id:'fast',t:2,e:'⚡',n:'スピードスター',d:'1かいで 5もん はやおしせいかい'},
+{id:'gold',t:1,e:'💰',n:'ゴールドハンター',d:'ゴールドもんだいにせいかい'},
+{id:'review',t:2,e:'💪',n:'にがてこくふく',d:'ふくしゅうでぜんもんせいかい'},
+{id:'day3',t:2,e:'📅',n:'3日れんぞく',d:'3日つづけてあそんだ',p:()=>[streakDays(),3]},
+{id:'day7',t:2,e:'💮',n:'スタンプ7こ',d:'スタンプを7こあつめた',p:()=>[S.days.length,7]},
+{id:'ok100',t:2,e:'🥉',n:'100もんせいかい',d:'ぜんぶで100もんせいかい',p:()=>[S.okN,100]},
+{id:'ok300',t:2,e:'🥇',n:'300もんせいかい',d:'ぜんぶで300もんせいかい',p:()=>[S.okN,300]},
+{id:'shop',t:1,e:'👒',n:'おしゃれさん',d:'きせかえをこうかんした'},
+{id:'dragon',t:3,e:'🐉',n:'ドラゴンのあいぼう',d:'でんせつになった'},
+{id:'line2',t:2,e:'🎁',n:'2ひきめのなかま',d:'あたらしいたまごをもらった'},
+{id:'alllines',t:3,e:'👑',n:'なかまコンプリート',d:'5しゅるいのなかまを ぜんぶそだてた'},
+
+{id:'asa',t:1,e:'🌅',n:'あさのちょうせん',d:'あさ 6じ〜9じに あそんだ'},
+{id:'ok7',t:1,e:'🎯',n:'7もんせいかい',d:'1かいで 7もん いじょう せいかい'},
+{id:'rvall',t:1,e:'💥',n:'リベンジせいこう',d:'リベンジタイムで ぜんぶ せいかい'},
+{id:'play5',t:1,e:'🔁',n:'5かいあそんだ',d:'あそんだ かいすう 5かい',p:()=>[S.plays,5]},
+{id:'coin100',t:1,e:'🪙',n:'ちょきん100',d:'つかえる ポイントを 100 ためた',p:()=>[S.coin,100]},
+{id:'combo15',t:2,e:'🔥',n:'15コンボ',d:'15もん れんぞく せいかい',p:()=>[bestCombo(),15]},
+{id:'run7',t:2,e:'🏃',n:'7日れんぞく',d:'7日 つづけて あそんだ',p:()=>[streakDays(),7]},
+{id:'day14',t:2,e:'🌸',n:'スタンプ14こ',d:'スタンプを 14こ あつめた',p:()=>[S.days.length,14]},
+{id:'play30',t:2,e:'🎖️',n:'30かいあそんだ',d:'あそんだ かいすう 30かい',p:()=>[S.plays,30]},
+{id:'ok500',t:2,e:'🥈',n:'500もんせいかい',d:'ぜんぶで 500もん せいかい',p:()=>[S.okN,500]},
+{id:'high250',t:2,e:'🌟',n:'ハイスコア250',d:'1かいで 250ポイント'},
+{id:'fast8',t:2,e:'🌩️',n:'いなずまスター',d:'1かいで 8もん はやおし せいかい'},
+{id:'hats3',t:2,e:'🎩',n:'きせかえコレクター',d:'ぼうしを 3つ いじょう こうかん',p:()=>[hatN(),3]},
+{id:'perf4',t:3,e:'🏆',n:'4きょうかパーフェクト',d:'4きょうか ぜんぶで パーフェクト',p:()=>[SK.filter(k=>S.badges['p_'+k]).length,4]},
+{id:'day30',t:3,e:'🌕',n:'スタンプ30こ',d:'スタンプを 30こ あつめた',p:()=>[S.days.length,30]},
+{id:'ok1000',t:3,e:'💎',n:'1000もんせいかい',d:'ぜんぶで 1000もん せいかい',p:()=>[S.okN,1000]},
+{id:'h_kokugo',t:3,e:'📚',n:'こくごはかせ',d:'こくごの もんだいに ぜんぶ 1かいずつ せいかい',p:()=>[corN('kokugo'),Q['kokugo'].length]},
+{id:'h_sansu',t:3,e:'🧮',n:'さんすうはかせ',d:'さんすうの もんだいに ぜんぶ 1かいずつ せいかい',p:()=>[corN('sansu'),Q['sansu'].length]},
+{id:'h_rika',t:3,e:'🔭',n:'しぜんはかせ',d:'しぜんの もんだいに ぜんぶ 1かいずつ せいかい',p:()=>[corN('rika'),Q['rika'].length]},
+{id:'h_shakai',t:3,e:'🗺️',n:'くらしはかせ',d:'くらしの もんだいに ぜんぶ 1かいずつ せいかい',p:()=>[corN('shakai'),Q['shakai'].length]},
 ];
 const HATS=[{id:'h0',n:'なし',e:'',c:0},{id:'h1',n:'リボン',e:'🎀',c:100},{id:'h2',n:'キャップ',e:'🧢',c:100},{id:'h3',n:'シルクハット',e:'🎩',c:150},{id:'h4',n:'はかせぼうし',e:'🎓',c:200},{id:'h5',n:'きゅうじょヘルメット',e:'⛑️',c:200},{id:'h6',n:'おうかん',e:'👑',c:300}];
 const BGS=[{id:'b0',n:'あおぞら',v:'linear-gradient(#bfe9ff,#e8f8ff)',c:0},{id:'b1',n:'もり',v:'linear-gradient(#9be29b,#e3f9d5)',c:100},{id:'b2',n:'うみ',v:'linear-gradient(#5ec8e8,#c9f3ff)',c:100},{id:'b3',n:'ゆうやけ',v:'linear-gradient(#ff9d5c,#ffd9a8,#ffe9d0)',c:150},{id:'b4',n:'うちゅう',v:'linear-gradient(#1b1f4b,#4a2f7a)',c:200},{id:'b5',n:'にじ',v:'linear-gradient(135deg,#ffb3b3,#ffe3a3,#fff7a8,#b9f0b0,#aee0ff,#d2b8ff)',c:300}];
@@ -641,7 +662,7 @@ const SAY_NG=['おしい! つぎはできるよ','だいじょうぶ、おぼえ
 
 /* ===== ほぞん ===== */
 const KEY='wakuwaku_quiz_1nen_v1';
-const DEF={total:0,coin:0,badges:{},days:[],wrong:{},seen:{},played:{},plays:0,okN:0,owned:{h0:1,b0:1},hat:'h0',bg:'b0',mute:false,hist:[],evo:{},line:0,show:0,start:{0:0},reach:{0:0}};
+const DEF={cor:{},total:0,coin:0,badges:{},days:[],wrong:{},seen:{},played:{},plays:0,okN:0,owned:{h0:1,b0:1},hat:'h0',bg:'b0',mute:false,hist:[],evo:{},line:0,show:0,start:{0:0},reach:{0:0}};
 let S=load();migrate();
 /* 記録をはじめる前に進化していた姿は 'pre'(日付なし) */
 function migrate(){if(!Array.isArray(S.hist))S.hist=[];if(!S.evo||typeof S.evo!=='object')S.evo={};
@@ -666,6 +687,9 @@ const pick=a=>a[rnd(a.length)];
 function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=rnd(i+1);[a[i],a[j]]=[a[j],a[i]]}return a}
 function fmt(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/\{([^|{}]+)\|([^{}]+)\}/g,'<ruby>$1<rt>$2</rt></ruby>').replace(/\[\[(.+?)\]\]/g,'<span class="tg">$1</span>')}
 function dstr(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
+function bestCombo(){return Math.max(0,...(S.hist||[]).map(h=>h.mx||0))}
+function hatN(){return HATS.filter(h=>h.c>0&&S.owned[h.id]).length}
+function corN(k){return Object.keys((S.cor||{})[k]||{}).length}
 function streakDays(){let n=0;const d=new Date();if(!S.days.includes(dstr(d)))d.setDate(d.getDate()-1);while(S.days.includes(dstr(d))){n++;d.setDate(d.getDate()-1)}return n}
 function charaHTML(){const l={e:LINES[S.show].s[Math.max(0,stageOf(S.show))][0]},h=HATS.find(x=>x.id===S.hat)||HATS[0];return (h.e?'<span class="hat">'+h.e+'</span>':'')+l.e}
 function react(el,cls){el.classList.remove('jump','sad');void el.offsetWidth;el.classList.add(cls)}
@@ -818,7 +842,7 @@ function answer(k,btn){
   }else{SFX.ng();const qc=$('qcard');qc.classList.remove('shake');void qc.offsetWidth;qc.classList.add('shake');
    $('res').className='res ng';$('res').textContent='おしい!';bd='こたえは「'+fmt(q.ch[0])+'」だよ';$('qsay').textContent='かいせつを いっしょに よもう!';}
  }else if(ok){
-  G.streak++;G.max=Math.max(G.max,G.streak);G.ok++;S.okN++;
+  G.streak++;G.max=Math.max(G.max,G.streak);G.ok++;S.okN++;{const[cm,ci]=String(q.id).split(':');if(Q[cm]){S.cor=S.cor||{};(S.cor[cm]=S.cor[cm]||{})[ci]=1}}
   let p=10;bd='<b>せいかい +10</b>';
   if(G.streak===2){p+=5;bd+='<b>🔥コンボ +5</b>'}else if(G.streak>=3){p+=10;bd+='<b>🔥コンボ +10</b>'}
   if(sec<15){p+=5;G.fast++;bd+='<b>⚡はやおし +5</b>'}else if(sec<25){p+=2;bd+='<b>⚡はやおし +2</b>'}
@@ -863,6 +887,10 @@ function finish(){
  if(G.score>=200)give('high');if(G.fast>=5)give('fast');if(G.goldHit)give('gold');
  if(streakDays()>=3)give('day3');if(S.days.length>=7)give('day7');
  if(S.okN>=100)give('ok100');if(S.okN>=300)give('ok300');
+ {const h=new Date().getHours();if(h>=6&&h<9)give('asa')}
+ if(G.ok>=7)give('ok7');if(G.rvN&&G.rvOk===G.rvN)give('rvall');if(G.max>=15)give('combo15');if(G.score>=250)give('high250');if(G.fast>=8)give('fast8');
+ if(hatN()>=3)give('hats3');
+ BADGES.forEach(b=>{if(b.p&&!/^p_|^day3$|^day7$|^ok100$|^ok300$|^combo10$/.test(b.id)){const[c,g]=b.p();if(c>=g)give(b.id)}});
  if(!S.evo['0-0'])S.evo['0-0']=td;
  const evs=advance(td);
  if((S.reach[0]||0)>=4)give('dragon');if(S.line>=1)give('line2');if(LINES.every((_,i)=>(S.reach[i]||0)>=4))give('alllines');
@@ -945,7 +973,11 @@ function backupIn(f){const r=new FileReader();r.onload=()=>{try{const j=JSON.par
 
 /* ===== バッジ・スタンプ・きせかえ ===== */
 function renderBadges(){const n=BADGES.filter(b=>S.badges[b.id]).length;$('bcount').textContent=n+' / '+BADGES.length;
- $('blist').innerHTML=BADGES.map(b=>{const on=S.badges[b.id];return '<div class="badge '+(on?'on':'off')+'"><span class="e">'+b.e+'</span><b>'+(on?b.n:'???')+'</b>'+b.d+'</div>'}).join('')}
+ const TT=["はじめの バッジ", "がんばりバッジ", "めざせ! ゆめの バッジ"];
+ $('blist').innerHTML=[1,2,3].map(t=>{const L=BADGES.filter(b=>b.t===t),k=L.filter(b=>S.badges[b.id]).length;
+  return '<h3 class="btier">'+TT[t-1]+' <span class="small">'+k+' / '+L.length+'</span></h3><div class="bgrid">'+L.map(b=>{const on=S.badges[b.id];let pr='';
+   if(!on&&b.p){const[c,g]=b.p();pr='<i class="bpr"><i style="width:'+Math.min(100,Math.round(c/g*100))+'%"></i></i><small>あと '+Math.max(1,g-c)+'</small>'}
+   return '<div class="badge '+(on?'on':'off')+'"><span class="e">'+b.e+'</span><b>'+(on?b.n:'???')+'</b>'+b.d+pr+'</div>'}).join('')+'</div>'}).join('')}
 function renderCal(){const now=new Date(),y=now.getFullYear(),m=now.getMonth(),first=new Date(y,m,1).getDay(),last=new Date(y,m+1,0).getDate();
  $('calhead').textContent='📅 '+(m+1)+'月のスタンプ';let h='日月火水木金土'.split('').map(d=>'<div class="hd">'+d+'</div>').join('');
  for(let i=0;i<first;i++)h+='<div class="x"></div>';
@@ -960,7 +992,7 @@ function renderShop(){$('scoin').textContent=S.coin;
  $('bgs').innerHTML=BGS.map(b=>row(b,'bg','<div class="pv" style="background:'+b.v+'"></div>')).join('')}
 function shopClick(e){const b=e.target.closest('button');if(!b)return;const t=b.dataset.t,list=t==='hat'?HATS:BGS;
  if(b.dataset.buy){const it=list.find(x=>x.id===b.dataset.buy);if(S.coin<it.c){SFX.ng();b.textContent='あと'+(it.c-S.coin);setTimeout(renderShop,1200);return}
-  S.coin-=it.c;S.owned[it.id]=1;S[t]=it.id;SFX.buy();confetti(60);if(!S.badges.shop){S.badges.shop=1;setTimeout(()=>ovPush({em:'👒',hd:'バッジをゲット!',tx:'「おしゃれさん」のバッジをもらったよ',fx:SFX.gold}),500)}}
+  S.coin-=it.c;S.owned[it.id]=1;S[t]=it.id;SFX.buy();confetti(60);if(hatN()>=3&&!S.badges.hats3){S.badges.hats3=1;setTimeout(()=>ovPush({em:'🎩',hd:'バッジをゲット!',tx:'「きせかえコレクター」のバッジをもらったよ',fx:SFX.gold}),1500)}if(!S.badges.shop){S.badges.shop=1;setTimeout(()=>ovPush({em:'👒',hd:'バッジをゲット!',tx:'「おしゃれさん」のバッジをもらったよ',fx:SFX.gold}),500)}}
  else if(b.dataset.use){S[t]=b.dataset.use;SFX.click()}else return;
  save();document.documentElement.style.setProperty('--bg',(BGS.find(x=>x.id===S.bg)||BGS[0]).v);renderShop()}
 
