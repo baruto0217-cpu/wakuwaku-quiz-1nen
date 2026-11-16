@@ -608,6 +608,11 @@ const LINES=[
  {n:'うみの なかま',s:[['🥚','なぞのたまご'],['🐟','さかな'],['🐬','イルカ'],['🐋','クジラ'],['🌊','うみのまもりがみ']]},
  {n:'むしの なかま',s:[['🥚','なぞのたまご'],['🐛','いもむし'],['🦋','チョウ'],['🦚','クジャク'],['🌈','にじのとり']]},
  {n:'いぬの なかま',s:[['🥚','なぞのたまご'],['🐶','こいぬ'],['🐕','いぬ'],['🐺','オオカミ'],['🐕‍🦺','しょうぼう犬']]},
+ {n:'きょうりゅうの なかま',s:[['🥚','なぞのたまご'],['🦎','トカゲ'],['🐊','ワニ'],['🦕','くびながりゅう'],['🦖','ティラノサウルス']]},
+ {n:'はなの なかま',s:[['🥚','なぞのたまご'],['🌱','ふたば'],['🌷','つぼみ'],['🌻','ひまわり'],['🌸','さくらのせい']]},
+ {n:'とりの なかま',s:[['🥚','なぞのたまご'],['🐤','ことり'],['🐦','あおいとり'],['🦉','フクロウ'],['🦅','そらのおう']]},
+ {n:'うまの なかま',s:[['🥚','なぞのたまご'],['🐴','こうま'],['🐎','うま'],['🦓','シマウマ'],['🦄','ユニコーン']]},
+ {n:'ほしの なかま',s:[['🥚','なぞのたまご'],['⭐','ほしのこ'],['🌟','きらぼし'],['🌙','つきのせい'],['🪐','うちゅうのおう']]},
 ];
 const BADGES=[
 {id:'first',t:1,e:'🌱',n:'はじめの いっぽ',d:'はじめてあそんだ'},
@@ -631,7 +636,8 @@ const BADGES=[
 {id:'shop',t:1,e:'👒',n:'おしゃれさん',d:'きせかえをこうかんした'},
 {id:'dragon',t:3,e:'🐉',n:'ドラゴンのあいぼう',d:'でんせつになった'},
 {id:'line2',t:2,e:'🎁',n:'2ひきめのなかま',d:'あたらしいたまごをもらった'},
-{id:'alllines',t:3,e:'👑',n:'なかまコンプリート',d:'5しゅるいのなかまを ぜんぶそだてた'},
+{id:'lines5',t:3,e:'🎪',n:'なかま5しゅるい',d:'5しゅるいの なかまを でんせつまで そだてた',p:()=>[legendN(),5]},
+{id:'alllines',t:3,e:'👑',n:'なかまコンプリート',d:'10しゅるいの なかまを ぜんぶ そだてた',p:()=>[legendN(),LINES.length]},
 
 {id:'asa',t:1,e:'🌅',n:'あさのちょうせん',d:'あさ 6じ〜9じに あそんだ'},
 {id:'ok7',t:1,e:'🎯',n:'7もんせいかい',d:'1かいで 7もん いじょう せいかい'},
@@ -687,6 +693,7 @@ const pick=a=>a[rnd(a.length)];
 function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=rnd(i+1);[a[i],a[j]]=[a[j],a[i]]}return a}
 function fmt(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/\{([^|{}]+)\|([^{}]+)\}/g,'<ruby>$1<rt>$2</rt></ruby>').replace(/\[\[(.+?)\]\]/g,'<span class="tg">$1</span>')}
 function dstr(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
+function legendN(){return LINES.filter((_,i)=>(S.reach[i]||0)>=4).length}
 function bestCombo(){return Math.max(0,...(S.hist||[]).map(h=>h.mx||0))}
 function hatN(){return HATS.filter(h=>h.c>0&&S.owned[h.id]).length}
 function corN(k){return Object.keys((S.cor||{})[k]||{}).length}
@@ -893,7 +900,7 @@ function finish(){
  BADGES.forEach(b=>{if(b.p&&!/^p_|^day3$|^day7$|^ok100$|^ok300$|^combo10$/.test(b.id)){const[c,g]=b.p();if(c>=g)give(b.id)}});
  if(!S.evo['0-0'])S.evo['0-0']=td;
  const evs=advance(td);
- if((S.reach[0]||0)>=4)give('dragon');if(S.line>=1)give('line2');if(LINES.every((_,i)=>(S.reach[i]||0)>=4))give('alllines');
+ if((S.reach[0]||0)>=4)give('dragon');if(S.line>=1)give('line2');if(LINES.every((_,i)=>(S.reach[i]||0)>=4))give('alllines');if(legendN()>=5)give('lines5');
  const nst=perfect?3:G.ok>=n*.7?2:G.ok>=n*.4?1:0;
  S.hist.push({t:Date.now(),m:G.mode,ok:G.ok,n,sc:G.score,st:nst,mx:G.max,rv:G.rvOk,rvn:G.rvN});if(S.hist.length>500)S.hist=S.hist.slice(-500);
  save();
