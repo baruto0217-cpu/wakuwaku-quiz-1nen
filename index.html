@@ -664,6 +664,22 @@ const BADGES=[
 {id:'perf4',t:3,e:'🏆',n:'4きょうかパーフェクト',d:'4きょうか ぜんぶで パーフェクト',p:()=>[SK.filter(k=>S.badges['p_'+k]).length,4]},
 {id:'day30',t:3,e:'🌕',n:'スタンプ30こ',d:'スタンプを 30こ あつめた',p:()=>[S.days.length,30]},
 {id:'ok1000',t:3,e:'💎',n:'1000もんせいかい',d:'ぜんぶで 1000もん せいかい',p:()=>[S.okN,1000]},
+{id:'yoru',t:1,e:'🌆',n:'よるのちょうせん',d:'ゆうがた 5じ〜よる 8じに あそんだ'},
+{id:'weekend',t:1,e:'🎒',n:'しゅうまつたんけん',d:'どようか にちように あそんだ'},
+{id:'evo1',t:1,e:'✨',n:'はじめてのしんか',d:'なかまが はじめて しんかした'},
+{id:'gold3',t:1,e:'🥉',n:'ゴールド3',d:'ゴールドもんだいに あわせて 3かい せいかい',p:()=>[S.goldN||0,3]},
+{id:'combo20',t:2,e:'☄️',n:'20コンボ',d:'20もん れんぞく せいかい',p:()=>[bestCombo(),20]},
+{id:'play50',t:2,e:'🎗️',n:'50かいあそんだ',d:'あそんだ かいすう 50かい',p:()=>[S.plays,50]},
+{id:'coin1000',t:2,e:'🏦',n:'ちょきん1000',d:'つかえる ポイントを 1000 ためた',p:()=>[S.coin,1000]},
+{id:'gold10',t:2,e:'🥈',n:'ゴールド10',d:'ゴールドもんだいに あわせて 10かい せいかい',p:()=>[S.goldN||0,10]},
+{id:'run14',t:2,e:'🚴',n:'14日れんぞく',d:'14日 つづけて あそんだ',p:()=>[streakDays(),14]},
+{id:'ok2000',t:2,e:'🎯',n:'2000もんせいかい',d:'ぜんぶで 2000もん せいかい',p:()=>[S.okN,2000]},
+{id:'play100',t:3,e:'🏆',n:'100かいあそんだ',d:'あそんだ かいすう 100かい',p:()=>[S.plays,100]},
+{id:'day50',t:3,e:'🌠',n:'スタンプ50こ',d:'スタンプを 50こ あつめた',p:()=>[S.days.length,50]},
+{id:'day100',t:3,e:'🌞',n:'スタンプ100こ',d:'スタンプを 100こ あつめた',p:()=>[S.days.length,100]},
+{id:'total10k',t:3,e:'🏔️',n:'1まんポイント',d:'これまでに あつめた ポイントが 10000',p:()=>[S.total,10000]},
+{id:'gold30',t:3,e:'🥇',n:'ゴールド30',d:'ゴールドもんだいに あわせて 30かい せいかい',p:()=>[S.goldN||0,30]},
+{id:'kise30',t:3,e:'👗',n:'おしゃれマスター',d:'きせかえを 30こ もっている',p:()=>[kiseN(),30]},
 {id:'h_kokugo',t:3,e:'📚',n:'こくごはかせ',d:'こくごの もんだいに ぜんぶ 1かいずつ せいかい',p:()=>[corN('kokugo'),Q['kokugo'].length]},
 {id:'h_sansu',t:3,e:'🧮',n:'さんすうはかせ',d:'さんすうの もんだいに ぜんぶ 1かいずつ せいかい',p:()=>[corN('sansu'),Q['sansu'].length]},
 {id:'h_rika',t:3,e:'🔭',n:'しぜんはかせ',d:'しぜんの もんだいに ぜんぶ 1かいずつ せいかい',p:()=>[corN('rika'),Q['rika'].length]},
@@ -677,7 +693,7 @@ const SAY_NG=['おしい! つぎはできるよ','だいじょうぶ、おぼえ
 
 /* ===== ほぞん ===== */
 const KEY='wakuwaku_quiz_1nen_v1';
-const DEF={cor:{},total:0,coin:0,badges:{},days:[],wrong:{},seen:{},played:{},plays:0,okN:0,owned:{h0:1,b0:1},hat:'h0',bg:'b0',mute:false,hist:[],evo:{},line:0,show:0,start:{0:0},reach:{0:0}};
+const DEF={goldN:0,cor:{},total:0,coin:0,badges:{},days:[],wrong:{},seen:{},played:{},plays:0,okN:0,owned:{h0:1,b0:1},hat:'h0',bg:'b0',mute:false,hist:[],evo:{},line:0,show:0,start:{0:0},reach:{0:0}};
 let S=load();migrate();
 /* 記録をはじめる前に進化していた姿は 'pre'(日付なし) */
 function migrate(){if(!Array.isArray(S.hist))S.hist=[];if(!S.evo||typeof S.evo!=='object')S.evo={};
@@ -892,7 +908,7 @@ function answer(k,btn){
 }
 function finish(){
  stopSay();const n=G.n0||G.qs.length,perfect=G.ok===n;
- S.total+=G.score;S.coin+=G.score;S.plays++;
+ S.total+=G.score;S.coin+=G.score;S.plays++;S.goldN=(S.goldN||0)+(G.goldHit||0);
  const td=dstr(new Date());if(!S.days.includes(td))S.days.push(td);
  if(SUBJ[G.mode])S.played[G.mode]=1;
  const got=[];const give=id=>{if(!S.badges[id]){S.badges[id]=1;got.push(BADGES.find(b=>b.id===id))}};
@@ -905,13 +921,13 @@ function finish(){
  if(G.score>=200)give('high');if(G.fast>=5)give('fast');if(G.goldHit)give('gold');
  if(streakDays()>=3)give('day3');if(S.days.length>=7)give('day7');
  if(S.okN>=100)give('ok100');if(S.okN>=300)give('ok300');
- {const h=new Date().getHours();if(h>=6&&h<9)give('asa')}
- if(G.ok>=7)give('ok7');if(G.rvN&&G.rvOk===G.rvN)give('rvall');if(G.max>=15)give('combo15');if(G.score>=250)give('high250');if(G.fast>=8)give('fast8');
+ {const d=new Date(),h=d.getHours();if(h>=6&&h<9)give('asa');if(h>=17&&h<20)give('yoru');if(d.getDay()===0||d.getDay()===6)give('weekend')}
+ if(G.ok>=7)give('ok7');if(G.rvN&&G.rvOk===G.rvN)give('rvall');if(G.max>=15)give('combo15');if(G.max>=20)give('combo20');if(G.score>=250)give('high250');if(G.fast>=8)give('fast8');
  if(hatN()>=3)give('hats3');if(kiseN()>=10)give('kise10');if(hatN()>=10)give('hat10');if(bgN()>=8)give('bg8');
  BADGES.forEach(b=>{if(b.p&&!/^p_|^day3$|^day7$|^ok100$|^ok300$|^combo10$/.test(b.id)){const[c,g]=b.p();if(c>=g)give(b.id)}});
  if(!S.evo['0-0'])S.evo['0-0']=td;
  const evs=advance(td);
- if((S.reach[0]||0)>=4)give('dragon');if(S.line>=1)give('line2');if(LINES.every((_,i)=>(S.reach[i]||0)>=4))give('alllines');if(legendN()>=5)give('lines5');if(legendN()>=10)give('lines10');
+ if((S.reach[0]||0)>=4)give('dragon');if(S.line>=1)give('line2');if(LINES.every((_,i)=>(S.reach[i]||0)>=4))give('alllines');if(legendN()>=5)give('lines5');if(legendN()>=10)give('lines10');if(Object.values(S.reach).some(v=>v>=1)||S.line>=1)give('evo1');
  const nst=perfect?3:G.ok>=n*.7?2:G.ok>=n*.4?1:0;
  S.hist.push({t:Date.now(),m:G.mode,ok:G.ok,n,sc:G.score,st:nst,mx:G.max,rv:G.rvOk,rvn:G.rvN});if(S.hist.length>500)S.hist=S.hist.slice(-500);
  save();
