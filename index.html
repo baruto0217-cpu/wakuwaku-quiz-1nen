@@ -32,6 +32,9 @@ h2{font-size:22px;margin:0 0 10px;text-align:center}
 .buddy{display:flex;align-items:center;gap:12px}
 .chara{position:relative;font-size:84px;line-height:1;width:110px;text-align:center;flex:none;animation:bob 2s ease-in-out infinite}
 .chara .hat{position:absolute;left:50%;top:-22px;transform:translateX(-50%);font-size:44px}
+.chara .fuku{position:absolute;left:50%;bottom:-4px;transform:translateX(-50%);font-size:40px}
+.chara .kutsu{position:absolute;left:50%;bottom:-24px;transform:translateX(-50%);font-size:28px;letter-spacing:-4px}
+.chara .mochi{position:absolute;right:-22px;bottom:10px;font-size:36px}
 .chara.jump{animation:jump .6s}
 .chara.sad{animation:sad .6s}
 @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
@@ -105,6 +108,7 @@ h2{font-size:22px;margin:0 0 10px;text-align:center}
 .mini{display:flex;align-items:center;gap:8px;font-size:15px}
 .mini .chara{font-size:46px;width:60px;animation:none}
 .mini .chara .hat{font-size:24px;top:-12px}
+.mini .chara .fuku{font-size:22px;bottom:-2px}.mini .chara .kutsu{font-size:16px;bottom:-12px}.mini .chara .mochi{font-size:20px;right:-12px}
 .mini .chara.jump{animation:jump .6s}.mini .chara.sad{animation:sad .6s}
 /* えんしゅつ */
 #fx{position:fixed;inset:0;pointer-events:none;z-index:50}
@@ -308,6 +312,9 @@ h2{font-size:22px;margin:0 0 10px;text-align:center}
 <section class="screen" id="shop">
   <div class="card"><h2>👒 きせかえやさん</h2><div style="text-align:center">つかえるポイント <b id="scoin" style="font-size:26px;color:#e2582b"></b></div></div>
   <div class="card"><h2>あいぼうのぼうし</h2><div id="hats"></div></div>
+  <div class="card"><h2>ふく</h2><div id="fukus"></div></div>
+  <div class="card"><h2>くつ</h2><div id="kutsus"></div></div>
+  <div class="card"><h2>もちもの</h2><div id="mochis"></div></div>
   <div class="card"><h2>はいけい</h2><div id="bgs"></div></div>
   <button class="back" data-go="home">もどる</button>
 </section>
@@ -668,6 +675,8 @@ const BADGES=[
 {id:'weekend',t:1,e:'🎒',n:'しゅうまつたんけん',d:'どようか にちように あそんだ'},
 {id:'evo1',t:1,e:'✨',n:'はじめてのしんか',d:'なかまが はじめて しんかした'},
 {id:'gold3',t:1,e:'🥉',n:'ゴールド3',d:'ゴールドもんだいに あわせて 3かい せいかい',p:()=>[S.goldN||0,3]},
+{id:'coord1',t:1,e:'👕',n:'はじめてのコーデ',d:'ふく・くつ・もちものを はじめて こうかん'},
+{id:'coordall',t:2,e:'🕺',n:'トータルコーデ',d:'ぼうし・ふく・くつ・もちものを ぜんぶ つけた'},
 {id:'combo20',t:2,e:'☄️',n:'20コンボ',d:'20もん れんぞく せいかい',p:()=>[bestCombo(),20]},
 {id:'play50',t:2,e:'🎗️',n:'50かいあそんだ',d:'あそんだ かいすう 50かい',p:()=>[S.plays,50]},
 {id:'coin1000',t:2,e:'🏦',n:'ちょきん1000',d:'つかえる ポイントを 1000 ためた',p:()=>[S.coin,1000]},
@@ -688,6 +697,9 @@ const BADGES=[
 {id:'h_shakai',t:3,e:'🗺️',n:'くらしはかせ',d:'くらしの もんだいに ぜんぶ 1かいずつ せいかい',p:()=>[corN('shakai'),Q['shakai'].length]},
 ];
 const HATS=[{id:'h0',n:'なし',e:'',c:0},{id:'h1',n:'リボン',e:'🎀',c:300},{id:'h2',n:'キャップ',e:'🧢',c:300},{id:'h3',n:'シルクハット',e:'🎩',c:450},{id:'h4',n:'はかせぼうし',e:'🎓',c:600},{id:'h5',n:'きゅうじょヘルメット',e:'⛑️',c:600},{id:'h6',n:'おうかん',e:'👑',c:900},{id:'h7',n:'はな',e:'🌸',c:300},{id:'h8',n:'むぎわらぼうし',e:'👒',c:360},{id:'h9',n:'まほうのつえ',e:'🪄',c:540},{id:'h10',n:'クリスマスツリー',e:'🎄',c:600},{id:'h11',n:'ヘッドホン',e:'🎧',c:600},{id:'h12',n:'しょうぼうしのヘルメット',e:'🪖',c:750},{id:'h13',n:'にじのかみかざり',e:'🌈',c:900},{id:'h14',n:'ほしのかんむり',e:'⭐',c:1200},{id:'h15',n:'いちご',e:'🍓',c:300},{id:'h16',n:'よつばのクローバー',e:'🍀',c:300},{id:'h17',n:'ちょうちょ',e:'🦋',c:360},{id:'h18',n:'ふうせん',e:'🎈',c:360},{id:'h19',n:'おにぎり',e:'🍙',c:450},{id:'h20',n:'サッカーボール',e:'⚽',c:450},{id:'h21',n:'カップケーキ',e:'🧁',c:540},{id:'h22',n:'とりのはね',e:'🪶',c:600},{id:'h23',n:'クラッカー',e:'🎉',c:750},{id:'h24',n:'ダイヤモンド',e:'💎',c:2400},{id:'h25',n:'さくらんぼ',e:'🍒',c:300},{id:'h26',n:'きのこ',e:'🍄',c:300},{id:'h27',n:'おんぷ',e:'🎵',c:360},{id:'h28',n:'すず',e:'🔔',c:360},{id:'h29',n:'ぺろぺろキャンディ',e:'🍭',c:450},{id:'h30',n:'すいか',e:'🍉',c:450},{id:'h31',n:'かいがら',e:'🐚',c:540},{id:'h32',n:'かぼちゃ',e:'🎃',c:600},{id:'h33',n:'かみなり',e:'⚡',c:900},{id:'h34',n:'すいしょうだま',e:'🔮',c:3000}];
+const FUKU=[{id:'f0',n:'なし',e:'',c:0},{id:'f1',n:'Tシャツ',e:'👕',c:300},{id:'f2',n:'ランニングシャツ',e:'🎽',c:300},{id:'f3',n:'ブラウス',e:'👚',c:360},{id:'f4',n:'ワンピース',e:'👗',c:450},{id:'f5',n:'みずぎ',e:'🩱',c:450},{id:'f6',n:'コート',e:'🧥',c:600},{id:'f7',n:'シャツとネクタイ',e:'👔',c:600},{id:'f8',n:'どうぎ',e:'🥋',c:750},{id:'f9',n:'あんぜんベスト',e:'🦺',c:900},{id:'f10',n:'きもの',e:'👘',c:1500}];
+const KUTSU=[{id:'k0',n:'なし',e:'',c:0},{id:'k1',n:'ビーチサンダル',e:'🩴',c:300},{id:'k2',n:'スニーカー',e:'👟',c:300},{id:'k3',n:'サンダル',e:'👡',c:360},{id:'k4',n:'かわぐつ',e:'👞',c:450},{id:'k5',n:'ブーツ',e:'🥾',c:600},{id:'k6',n:'バレエシューズ',e:'🩰',c:750},{id:'k7',n:'スケートぐつ',e:'⛸️',c:900},{id:'k8',n:'ローラースケート',e:'🛼',c:1200}];
+const MOCHI=[{id:'m0',n:'なし',e:'',c:0},{id:'m1',n:'かさ',e:'☂️',c:300},{id:'m2',n:'ほん',e:'📚',c:300},{id:'m3',n:'たこ',e:'🪁',c:450},{id:'m4',n:'かいちゅうでんとう',e:'🔦',c:450},{id:'m5',n:'トランペット',e:'🎺',c:600},{id:'m6',n:'ギター',e:'🎸',c:750},{id:'m7',n:'むしとりあみ',e:'🥅',c:900},{id:'m8',n:'トロフィー',e:'🏆',c:1500}];
 const BGS=[{id:'b0',n:'あおぞら',v:'linear-gradient(#bfe9ff,#e8f8ff)',c:0},{id:'b1',n:'もり',v:'linear-gradient(#9be29b,#e3f9d5)',c:300},{id:'b2',n:'うみ',v:'linear-gradient(#5ec8e8,#c9f3ff)',c:300},{id:'b3',n:'ゆうやけ',v:'linear-gradient(#ff9d5c,#ffd9a8,#ffe9d0)',c:450},{id:'b4',n:'うちゅう',v:'linear-gradient(#1b1f4b,#4a2f7a)',c:600},{id:'b5',n:'にじ',v:'linear-gradient(135deg,#ffb3b3,#ffe3a3,#fff7a8,#b9f0b0,#aee0ff,#d2b8ff)',c:900},{id:'b6',n:'さくら',v:'linear-gradient(#ffc8dd,#fff0f5)',c:300},{id:'b7',n:'ゆき',v:'linear-gradient(#d6ecff,#ffffff)',c:360},{id:'b8',n:'おかし',v:'linear-gradient(135deg,#ffd6e7,#fff3c4,#d4f5e9)',c:450},{id:'b9',n:'よぞら',v:'linear-gradient(#24326e,#5a6bb0,#a9b4e8)',c:600},{id:'b10',n:'オーロラ',v:'linear-gradient(160deg,#16365c,#2fb48c,#9be3c6,#c7a8ff)',c:900},{id:'b11',n:'きんいろ',v:'linear-gradient(135deg,#ffe58a,#fff6cf,#f4c542)',c:1500},{id:'b12',n:'ひまわりばたけ',v:'linear-gradient(#9fd8ff,#e9f7ff 55%,#ffe36b)',c:300},{id:'b13',n:'ラムネ',v:'linear-gradient(#8fdcf5,#ffffff)',c:300},{id:'b14',n:'もみじ',v:'linear-gradient(#ff8a65,#ffc58a,#fff0dc)',c:360},{id:'b15',n:'ぶどう',v:'linear-gradient(#b48ae0,#e9dbff)',c:450},{id:'b16',n:'メロンソーダ',v:'linear-gradient(#b8ef7a,#f2ffe4)',c:450},{id:'b17',n:'あさやけ',v:'linear-gradient(#ff9ec4,#ffc89a,#fff1d6)',c:540},{id:'b18',n:'しんかい',v:'linear-gradient(#0f2a5c,#1f5fa8,#7cc3ef)',c:750},{id:'b19',n:'ほうせき',v:'linear-gradient(135deg,#2bbf8a,#8fe3c4,#b993ff,#7a4fd6)',c:1200},{id:'b20',n:'ゆめのせかい',v:'linear-gradient(135deg,#ffc6e0,#fff2b3,#c8f7c5,#bfe6ff,#e2ccff)',c:1800},{id:'b21',n:'レモン',v:'linear-gradient(#fff27a,#fffde6)',c:300},{id:'b22',n:'ミント',v:'linear-gradient(#bff5df,#d9f3ff)',c:300},{id:'b23',n:'ももいろ',v:'linear-gradient(#ffc2d6,#fff4e0)',c:360},{id:'b24',n:'そらいろ',v:'repeating-linear-gradient(180deg,#a8dcff 0 60px,#ffffff 60px 120px)',c:360},{id:'b25',n:'こうよう',v:'linear-gradient(160deg,#ffb347,#ffe066,#ff7b5c)',c:450},{id:'b26',n:'くもりのち はれ',v:'linear-gradient(#c9ced6,#e4eaf0,#9fdcff)',c:450},{id:'b27',n:'かざん',v:'linear-gradient(#3a1212,#a8241a,#ff7a3d)',c:750},{id:'b28',n:'ジャングル',v:'linear-gradient(#1f7a3a,#5cbf4f,#c9f08a)',c:750},{id:'b29',n:'ぎんいろ',v:'linear-gradient(135deg,#d7dde3,#ffffff,#b7c0c9,#f2f5f8)',c:1500},{id:'b30',n:'にじいろ ぎんが',v:'linear-gradient(160deg,#1a1f5c,#5b3fa8,#ff7ac0,#5fb8ff)',c:3000}];
 const SAY_HOME=['きょうも いっしょに がんばろう!','どの きょうかから やる?','ポイントをためて、ぼくをそだててね!','まちがえても だいじょうぶ。ふくしゅうすれば つよくなるよ!','ゴールドもんだいが出たらチャンス!'];
 const SAY_OK=['すごい!','やったね!','てんさい!','そのちょうし!','かんぺき!','さすが!'];
@@ -695,7 +707,7 @@ const SAY_NG=['おしい! つぎはできるよ','だいじょうぶ、おぼえ
 
 /* ===== ほぞん ===== */
 const KEY='wakuwaku_quiz_1nen_v1';
-const DEF={goldN:0,cor:{},total:0,coin:0,badges:{},days:[],wrong:{},seen:{},played:{},plays:0,okN:0,owned:{h0:1,b0:1},hat:'h0',bg:'b0',mute:false,hist:[],evo:{},line:0,show:0,start:{0:0},reach:{0:0}};
+const DEF={goldN:0,cor:{},total:0,coin:0,badges:{},days:[],wrong:{},seen:{},played:{},plays:0,okN:0,owned:{h0:1,b0:1},hat:'h0',fuku:'f0',kutsu:'k0',mochi:'m0',bg:'b0',mute:false,hist:[],evo:{},line:0,show:0,start:{0:0},reach:{0:0}};
 let S=load();migrate();
 /* 記録をはじめる前に進化していた姿は 'pre'(日付なし) */
 function migrate(){if(!Array.isArray(S.hist))S.hist=[];if(!S.evo||typeof S.evo!=='object')S.evo={};
@@ -723,11 +735,13 @@ function dstr(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0
 function legendN(){return LINES.filter((_,i)=>(S.reach[i]||0)>=4).length}
 function bestCombo(){return Math.max(0,...(S.hist||[]).map(h=>h.mx||0))}
 function bgN(){return BGS.filter(h=>h.c>0&&S.owned[h.id]).length}
-function kiseN(){return HATS.concat(BGS).filter(h=>h.c>0&&S.owned[h.id]).length}
+function kiseN(){return HATS.concat(BGS,FUKU,KUTSU,MOCHI).filter(h=>h.c>0&&S.owned[h.id]).length}
+function wearN(){return FUKU.concat(KUTSU,MOCHI).filter(h=>h.c>0&&S.owned[h.id]).length}
+function coordAll(){return S.hat!=='h0'&&S.fuku!=='f0'&&S.kutsu!=='k0'&&S.mochi!=='m0'}
 function hatN(){return HATS.filter(h=>h.c>0&&S.owned[h.id]).length}
 function corN(k){return Object.keys((S.cor||{})[k]||{}).length}
 function streakDays(){let n=0;const d=new Date();if(!S.days.includes(dstr(d)))d.setDate(d.getDate()-1);while(S.days.includes(dstr(d))){n++;d.setDate(d.getDate()-1)}return n}
-function charaHTML(){const l={e:LINES[S.show].s[Math.max(0,stageOf(S.show))][0]},h=HATS.find(x=>x.id===S.hat)||HATS[0];return (h.e?'<span class="hat">'+h.e+'</span>':'')+l.e}
+function charaHTML(){const l={e:LINES[S.show].s[Math.max(0,stageOf(S.show))][0]},h=HATS.find(x=>x.id===S.hat)||HATS[0];const g=(A,id,c)=>{const x=A.find(y=>y.id===id);return x&&x.e?'<span class="'+c+'">'+x.e+'</span>':''};return (h.e?'<span class="hat">'+h.e+'</span>':'')+l.e+g(FUKU,S.fuku,'fuku')+g(KUTSU,S.kutsu,'kutsu')+g(MOCHI,S.mochi,'mochi')}
 function react(el,cls){el.classList.remove('jump','sad');void el.offsetWidth;el.classList.add(cls)}
 function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.toggle('on',s.id===id));window.scrollTo(0,0);document.body.classList.remove('rainbow');$('flames').classList.remove('on');
   if(id==='home')renderHome();if(id==='badges')renderBadges();if(id==='calendar')renderCal();if(id==='shop')renderShop();if(id==='record')renderRecord();if(id==='album')renderAlbum()}
@@ -925,7 +939,7 @@ function finish(){
  if(S.okN>=100)give('ok100');if(S.okN>=300)give('ok300');
  {const d=new Date(),h=d.getHours();if(h>=6&&h<9)give('asa');if(h>=17&&h<20)give('yoru');if(d.getDay()===0||d.getDay()===6)give('weekend')}
  if(G.ok>=7)give('ok7');if(G.rvN&&G.rvOk===G.rvN)give('rvall');if(G.max>=15)give('combo15');if(G.max>=20)give('combo20');if(G.score>=250)give('high250');if(G.fast>=8)give('fast8');
- if(hatN()>=3)give('hats3');if(kiseN()>=10)give('kise10');if(hatN()>=10)give('hat10');if(hatN()>=20)give('hat20');if(bgN()>=8)give('bg8');if(bgN()>=20)give('bg20');
+ if(hatN()>=3)give('hats3');if(kiseN()>=10)give('kise10');if(hatN()>=10)give('hat10');if(hatN()>=20)give('hat20');if(bgN()>=8)give('bg8');if(bgN()>=20)give('bg20');if(wearN()>=1)give('coord1');if(coordAll())give('coordall');
  BADGES.forEach(b=>{if(b.p&&!/^p_|^day3$|^day7$|^ok100$|^ok300$|^combo10$/.test(b.id)){const[c,g]=b.p();if(c>=g)give(b.id)}});
  if(!S.evo['0-0'])S.evo['0-0']=td;
  const evs=advance(td);
@@ -1020,16 +1034,18 @@ function renderCal(){const now=new Date(),y=now.getFullYear(),m=now.getMonth(),f
  for(let d=1;d<=last;d++){const ds=dstr(new Date(y,m,d)),st=S.days.includes(ds);h+='<div class="'+(st?'st ':'')+(d===now.getDate()?'today':'')+'">'+d+'</div>'}
  $('cal').innerHTML=h;const sd=streakDays();$('caltxt').textContent='あそんだ日にスタンプがつくよ。ぜんぶで '+S.days.length+'こ'+(sd>=2?' / '+sd+'日れんぞく中!':'')}
 function renderShop(){$('scoin').textContent=S.coin;
- const row=(it,type,pv)=>{const own=S.owned[it.id],cur=S[type]===it.id;let b;
+ const row=(it,type,pv)=>{const own=S.owned[it.id]||it.c===0,cur=S[type]===it.id;let b;
   if(cur)b='<button class="cur" disabled>つかってる</button>';else if(own)b='<button class="use" data-use="'+it.id+'" data-t="'+type+'">つかう</button>';
   else b='<button class="'+(S.coin>=it.c?'':'no')+'" data-buy="'+it.id+'" data-t="'+type+'">'+it.c+' ポイント</button>';
   return '<div class="item">'+pv+'<div class="nm">'+it.n+'</div>'+b+'</div>'};
  $('hats').innerHTML=HATS.map(h=>row(h,'hat','<div class="pv" style="background:#fff">'+(h.e||'🚫')+'</div>')).join('');
+ const pe=h=>'<div class="pv" style="background:#fff">'+(h.e||'🚫')+'</div>';$('fukus').innerHTML=FUKU.map(h=>row(h,'fuku',pe(h))).join('');$('kutsus').innerHTML=KUTSU.map(h=>row(h,'kutsu',pe(h))).join('');$('mochis').innerHTML=MOCHI.map(h=>row(h,'mochi',pe(h))).join('');
  $('bgs').innerHTML=BGS.map(b=>row(b,'bg','<div class="pv" style="background:'+b.v+'"></div>')).join('')}
-function shopClick(e){const b=e.target.closest('button');if(!b)return;const t=b.dataset.t,list=t==='hat'?HATS:BGS;
+function shopClick(e){const b=e.target.closest('button');if(!b)return;const t=b.dataset.t,list={hat:HATS,bg:BGS,fuku:FUKU,kutsu:KUTSU,mochi:MOCHI}[t];
  if(b.dataset.buy){const it=list.find(x=>x.id===b.dataset.buy);if(S.coin<it.c){SFX.ng();b.textContent='あと'+(it.c-S.coin);setTimeout(renderShop,1200);return}
-  S.coin-=it.c;S.owned[it.id]=1;S[t]=it.id;SFX.buy();confetti(60);if(hatN()>=3&&!S.badges.hats3){S.badges.hats3=1;setTimeout(()=>ovPush({em:'🎩',hd:'バッジをゲット!',tx:'「きせかえコレクター」のバッジをもらったよ',fx:SFX.gold}),1500)}if(bgN()>=8&&!S.badges.bg8){S.badges.bg8=1;setTimeout(()=>ovPush({em:'🖼️',hd:'バッジをゲット!',tx:'「はいけいコレクター」のバッジをもらったよ',fx:SFX.gold}),3500)}if(hatN()>=10&&!S.badges.hat10){S.badges.hat10=1;setTimeout(()=>ovPush({em:'🎩',hd:'バッジをゲット!',tx:'「ぼうしめいじん」のバッジをもらったよ',fx:SFX.gold}),4500)}if(bgN()>=20&&!S.badges.bg20){S.badges.bg20=1;setTimeout(()=>ovPush({em:'🏞️',hd:'バッジをゲット!',tx:'「はいけいマスター」のバッジをもらったよ',fx:SFX.gold}),5500)}if(hatN()>=20&&!S.badges.hat20){S.badges.hat20=1;setTimeout(()=>ovPush({em:'🧙',hd:'バッジをゲット!',tx:'「ぼうしマスター」のバッジをもらったよ',fx:SFX.gold}),6500)}if(kiseN()>=10&&!S.badges.kise10){S.badges.kise10=1;setTimeout(()=>ovPush({em:'💃',hd:'バッジをゲット!',tx:'「おしゃれめいじん」のバッジをもらったよ',fx:SFX.gold}),2500)}if(!S.badges.shop){S.badges.shop=1;setTimeout(()=>ovPush({em:'👒',hd:'バッジをゲット!',tx:'「おしゃれさん」のバッジをもらったよ',fx:SFX.gold}),500)}}
+  S.coin-=it.c;S.owned[it.id]=1;S[t]=it.id;SFX.buy();confetti(60);if(wearN()>=1&&!S.badges.coord1){S.badges.coord1=1;setTimeout(()=>ovPush({em:'👕',hd:'バッジをゲット!',tx:'「はじめてのコーデ」のバッジをもらったよ',fx:SFX.gold}),7500)}if(hatN()>=3&&!S.badges.hats3){S.badges.hats3=1;setTimeout(()=>ovPush({em:'🎩',hd:'バッジをゲット!',tx:'「きせかえコレクター」のバッジをもらったよ',fx:SFX.gold}),1500)}if(bgN()>=8&&!S.badges.bg8){S.badges.bg8=1;setTimeout(()=>ovPush({em:'🖼️',hd:'バッジをゲット!',tx:'「はいけいコレクター」のバッジをもらったよ',fx:SFX.gold}),3500)}if(hatN()>=10&&!S.badges.hat10){S.badges.hat10=1;setTimeout(()=>ovPush({em:'🎩',hd:'バッジをゲット!',tx:'「ぼうしめいじん」のバッジをもらったよ',fx:SFX.gold}),4500)}if(bgN()>=20&&!S.badges.bg20){S.badges.bg20=1;setTimeout(()=>ovPush({em:'🏞️',hd:'バッジをゲット!',tx:'「はいけいマスター」のバッジをもらったよ',fx:SFX.gold}),5500)}if(hatN()>=20&&!S.badges.hat20){S.badges.hat20=1;setTimeout(()=>ovPush({em:'🧙',hd:'バッジをゲット!',tx:'「ぼうしマスター」のバッジをもらったよ',fx:SFX.gold}),6500)}if(kiseN()>=10&&!S.badges.kise10){S.badges.kise10=1;setTimeout(()=>ovPush({em:'💃',hd:'バッジをゲット!',tx:'「おしゃれめいじん」のバッジをもらったよ',fx:SFX.gold}),2500)}if(!S.badges.shop){S.badges.shop=1;setTimeout(()=>ovPush({em:'👒',hd:'バッジをゲット!',tx:'「おしゃれさん」のバッジをもらったよ',fx:SFX.gold}),500)}}
  else if(b.dataset.use){S[t]=b.dataset.use;SFX.click()}else return;
+ if(coordAll()&&!S.badges.coordall){S.badges.coordall=1;setTimeout(()=>ovPush({em:'🕺',hd:'バッジをゲット!',tx:'「トータルコーデ」のバッジをもらったよ',fx:SFX.gold}),8500)}
  save();document.documentElement.style.setProperty('--bg',(BGS.find(x=>x.id===S.bg)||BGS[0]).v);renderShop()}
 
 /* ===== ボタン ===== */
@@ -1047,7 +1063,7 @@ $('mute').onclick=()=>{S.mute=!S.mute;save();$('mute').textContent=S.mute?'🔇'
 $('chara').onclick=()=>{react($('chara'),'jump');$('say').textContent=pick(SAY_HOME);SFX.click()};
 $('bkOut').onclick=backupOut;$('bkIn').onclick=()=>$('bkFile').click();$('bkFile').onchange=e=>{const f=e.target.files[0];if(f)backupIn(f);e.target.value=''};
 addEventListener('resize',()=>{if($('record').classList.contains('on'))drawChart()});
-$('hats').onclick=shopClick;$('bgs').onclick=shopClick;
+$('hats').onclick=shopClick;$('bgs').onclick=shopClick;$('fukus').onclick=shopClick;$('kutsus').onclick=shopClick;$('mochis').onclick=shopClick;
 $('reset').onclick=()=>{if(confirm('ポイントもバッジも ぜんぶきえるよ。ほんとうにけす?')&&confirm('もういちど かくにん。けしていい?')){try{localStorage.removeItem(KEY)}catch(e){}S=load();migrate();show('home')}};
 renderHome();
 </script>
