@@ -651,6 +651,7 @@ const BADGES=[
 {id:'ok500',t:2,e:'🥈',n:'500もんせいかい',d:'ぜんぶで 500もん せいかい',p:()=>[S.okN,500]},
 {id:'high250',t:2,e:'🌟',n:'ハイスコア250',d:'1かいで 250ポイント'},
 {id:'fast8',t:2,e:'🌩️',n:'いなずまスター',d:'1かいで 8もん はやおし せいかい'},
+{id:'bg8',t:2,e:'🖼️',n:'はいけいコレクター',d:'はいけいを 8こ もっている',p:()=>[bgN(),8]},
 {id:'kise10',t:3,e:'💃',n:'おしゃれめいじん',d:'きせかえを 10こ もっている',p:()=>[kiseN(),10]},
 {id:'hats3',t:2,e:'🎩',n:'きせかえコレクター',d:'ぼうしを 3つ いじょう こうかん',p:()=>[hatN(),3]},
 {id:'perf4',t:3,e:'🏆',n:'4きょうかパーフェクト',d:'4きょうか ぜんぶで パーフェクト',p:()=>[SK.filter(k=>S.badges['p_'+k]).length,4]},
@@ -662,7 +663,7 @@ const BADGES=[
 {id:'h_shakai',t:3,e:'🗺️',n:'くらしはかせ',d:'くらしの もんだいに ぜんぶ 1かいずつ せいかい',p:()=>[corN('shakai'),Q['shakai'].length]},
 ];
 const HATS=[{id:'h0',n:'なし',e:'',c:0},{id:'h1',n:'リボン',e:'🎀',c:100},{id:'h2',n:'キャップ',e:'🧢',c:100},{id:'h3',n:'シルクハット',e:'🎩',c:150},{id:'h4',n:'はかせぼうし',e:'🎓',c:200},{id:'h5',n:'きゅうじょヘルメット',e:'⛑️',c:200},{id:'h6',n:'おうかん',e:'👑',c:300},{id:'h7',n:'はな',e:'🌸',c:100},{id:'h8',n:'むぎわらぼうし',e:'👒',c:120},{id:'h9',n:'まほうのつえ',e:'🪄',c:180},{id:'h10',n:'クリスマスツリー',e:'🎄',c:200},{id:'h11',n:'ヘッドホン',e:'🎧',c:200},{id:'h12',n:'しょうぼうしのヘルメット',e:'🪖',c:250},{id:'h13',n:'にじのかみかざり',e:'🌈',c:300},{id:'h14',n:'ほしのかんむり',e:'⭐',c:400}];
-const BGS=[{id:'b0',n:'あおぞら',v:'linear-gradient(#bfe9ff,#e8f8ff)',c:0},{id:'b1',n:'もり',v:'linear-gradient(#9be29b,#e3f9d5)',c:100},{id:'b2',n:'うみ',v:'linear-gradient(#5ec8e8,#c9f3ff)',c:100},{id:'b3',n:'ゆうやけ',v:'linear-gradient(#ff9d5c,#ffd9a8,#ffe9d0)',c:150},{id:'b4',n:'うちゅう',v:'linear-gradient(#1b1f4b,#4a2f7a)',c:200},{id:'b5',n:'にじ',v:'linear-gradient(135deg,#ffb3b3,#ffe3a3,#fff7a8,#b9f0b0,#aee0ff,#d2b8ff)',c:300},{id:'b6',n:'さくら',v:'linear-gradient(#ffc8dd,#fff0f5)',c:100},{id:'b7',n:'ゆき',v:'linear-gradient(#d6ecff,#ffffff)',c:120},{id:'b8',n:'おかし',v:'linear-gradient(135deg,#ffd6e7,#fff3c4,#d4f5e9)',c:150},{id:'b9',n:'よぞら',v:'linear-gradient(#24326e,#5a6bb0,#a9b4e8)',c:200},{id:'b10',n:'オーロラ',v:'linear-gradient(160deg,#16365c,#2fb48c,#9be3c6,#c7a8ff)',c:300},{id:'b11',n:'きんいろ',v:'linear-gradient(135deg,#ffe58a,#fff6cf,#f4c542)',c:500}];
+const BGS=[{id:'b0',n:'あおぞら',v:'linear-gradient(#bfe9ff,#e8f8ff)',c:0},{id:'b1',n:'もり',v:'linear-gradient(#9be29b,#e3f9d5)',c:100},{id:'b2',n:'うみ',v:'linear-gradient(#5ec8e8,#c9f3ff)',c:100},{id:'b3',n:'ゆうやけ',v:'linear-gradient(#ff9d5c,#ffd9a8,#ffe9d0)',c:150},{id:'b4',n:'うちゅう',v:'linear-gradient(#1b1f4b,#4a2f7a)',c:200},{id:'b5',n:'にじ',v:'linear-gradient(135deg,#ffb3b3,#ffe3a3,#fff7a8,#b9f0b0,#aee0ff,#d2b8ff)',c:300},{id:'b6',n:'さくら',v:'linear-gradient(#ffc8dd,#fff0f5)',c:100},{id:'b7',n:'ゆき',v:'linear-gradient(#d6ecff,#ffffff)',c:120},{id:'b8',n:'おかし',v:'linear-gradient(135deg,#ffd6e7,#fff3c4,#d4f5e9)',c:150},{id:'b9',n:'よぞら',v:'linear-gradient(#24326e,#5a6bb0,#a9b4e8)',c:200},{id:'b10',n:'オーロラ',v:'linear-gradient(160deg,#16365c,#2fb48c,#9be3c6,#c7a8ff)',c:300},{id:'b11',n:'きんいろ',v:'linear-gradient(135deg,#ffe58a,#fff6cf,#f4c542)',c:500},{id:'b12',n:'ひまわりばたけ',v:'linear-gradient(#9fd8ff,#e9f7ff 55%,#ffe36b)',c:100},{id:'b13',n:'ラムネ',v:'linear-gradient(#8fdcf5,#ffffff)',c:100},{id:'b14',n:'もみじ',v:'linear-gradient(#ff8a65,#ffc58a,#fff0dc)',c:120},{id:'b15',n:'ぶどう',v:'linear-gradient(#b48ae0,#e9dbff)',c:150},{id:'b16',n:'メロンソーダ',v:'linear-gradient(#b8ef7a,#f2ffe4)',c:150},{id:'b17',n:'あさやけ',v:'linear-gradient(#ff9ec4,#ffc89a,#fff1d6)',c:180},{id:'b18',n:'しんかい',v:'linear-gradient(#0f2a5c,#1f5fa8,#7cc3ef)',c:250},{id:'b19',n:'ほうせき',v:'linear-gradient(135deg,#2bbf8a,#8fe3c4,#b993ff,#7a4fd6)',c:400},{id:'b20',n:'ゆめのせかい',v:'linear-gradient(135deg,#ffc6e0,#fff2b3,#c8f7c5,#bfe6ff,#e2ccff)',c:600}];
 const SAY_HOME=['きょうも いっしょに がんばろう!','どの きょうかから やる?','ポイントをためて、ぼくをそだててね!','まちがえても だいじょうぶ。ふくしゅうすれば つよくなるよ!','ゴールドもんだいが出たらチャンス!'];
 const SAY_OK=['すごい!','やったね!','てんさい!','そのちょうし!','かんぺき!','さすが!'];
 const SAY_NG=['おしい! つぎはできるよ','だいじょうぶ、おぼえちゃおう','ドンマイ! いっしょにおぼえよう','まちがいは せいちょうのもと!'];
@@ -696,6 +697,7 @@ function fmt(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').repl
 function dstr(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
 function legendN(){return LINES.filter((_,i)=>(S.reach[i]||0)>=4).length}
 function bestCombo(){return Math.max(0,...(S.hist||[]).map(h=>h.mx||0))}
+function bgN(){return BGS.filter(h=>h.c>0&&S.owned[h.id]).length}
 function kiseN(){return HATS.concat(BGS).filter(h=>h.c>0&&S.owned[h.id]).length}
 function hatN(){return HATS.filter(h=>h.c>0&&S.owned[h.id]).length}
 function corN(k){return Object.keys((S.cor||{})[k]||{}).length}
@@ -898,7 +900,7 @@ function finish(){
  if(S.okN>=100)give('ok100');if(S.okN>=300)give('ok300');
  {const h=new Date().getHours();if(h>=6&&h<9)give('asa')}
  if(G.ok>=7)give('ok7');if(G.rvN&&G.rvOk===G.rvN)give('rvall');if(G.max>=15)give('combo15');if(G.score>=250)give('high250');if(G.fast>=8)give('fast8');
- if(hatN()>=3)give('hats3');if(kiseN()>=10)give('kise10');
+ if(hatN()>=3)give('hats3');if(kiseN()>=10)give('kise10');if(bgN()>=8)give('bg8');
  BADGES.forEach(b=>{if(b.p&&!/^p_|^day3$|^day7$|^ok100$|^ok300$|^combo10$/.test(b.id)){const[c,g]=b.p();if(c>=g)give(b.id)}});
  if(!S.evo['0-0'])S.evo['0-0']=td;
  const evs=advance(td);
@@ -1001,7 +1003,7 @@ function renderShop(){$('scoin').textContent=S.coin;
  $('bgs').innerHTML=BGS.map(b=>row(b,'bg','<div class="pv" style="background:'+b.v+'"></div>')).join('')}
 function shopClick(e){const b=e.target.closest('button');if(!b)return;const t=b.dataset.t,list=t==='hat'?HATS:BGS;
  if(b.dataset.buy){const it=list.find(x=>x.id===b.dataset.buy);if(S.coin<it.c){SFX.ng();b.textContent='あと'+(it.c-S.coin);setTimeout(renderShop,1200);return}
-  S.coin-=it.c;S.owned[it.id]=1;S[t]=it.id;SFX.buy();confetti(60);if(hatN()>=3&&!S.badges.hats3){S.badges.hats3=1;setTimeout(()=>ovPush({em:'🎩',hd:'バッジをゲット!',tx:'「きせかえコレクター」のバッジをもらったよ',fx:SFX.gold}),1500)}if(kiseN()>=10&&!S.badges.kise10){S.badges.kise10=1;setTimeout(()=>ovPush({em:'💃',hd:'バッジをゲット!',tx:'「おしゃれめいじん」のバッジをもらったよ',fx:SFX.gold}),2500)}if(!S.badges.shop){S.badges.shop=1;setTimeout(()=>ovPush({em:'👒',hd:'バッジをゲット!',tx:'「おしゃれさん」のバッジをもらったよ',fx:SFX.gold}),500)}}
+  S.coin-=it.c;S.owned[it.id]=1;S[t]=it.id;SFX.buy();confetti(60);if(hatN()>=3&&!S.badges.hats3){S.badges.hats3=1;setTimeout(()=>ovPush({em:'🎩',hd:'バッジをゲット!',tx:'「きせかえコレクター」のバッジをもらったよ',fx:SFX.gold}),1500)}if(bgN()>=8&&!S.badges.bg8){S.badges.bg8=1;setTimeout(()=>ovPush({em:'🖼️',hd:'バッジをゲット!',tx:'「はいけいコレクター」のバッジをもらったよ',fx:SFX.gold}),3500)}if(kiseN()>=10&&!S.badges.kise10){S.badges.kise10=1;setTimeout(()=>ovPush({em:'💃',hd:'バッジをゲット!',tx:'「おしゃれめいじん」のバッジをもらったよ',fx:SFX.gold}),2500)}if(!S.badges.shop){S.badges.shop=1;setTimeout(()=>ovPush({em:'👒',hd:'バッジをゲット!',tx:'「おしゃれさん」のバッジをもらったよ',fx:SFX.gold}),500)}}
  else if(b.dataset.use){S[t]=b.dataset.use;SFX.click()}else return;
  save();document.documentElement.style.setProperty('--bg',(BGS.find(x=>x.id===S.bg)||BGS[0]).v);renderShop()}
 
