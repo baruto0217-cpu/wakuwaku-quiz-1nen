@@ -924,9 +924,9 @@ let G=null,lastMode='mix';
 function qobj(s,i){const q=Q[s][i];return{id:s+':'+i,s,q:q[0],ch:q[1],ex:q[2],nc:q[4]===1,sq:q[5]||''}}
 function build(mode){
  let ids=[];
- if(SUBJ[mode]){const all=Q[mode].map((_,i)=>i);let seen=S.seen[mode]||[];let pool=all.filter(i=>!seen.includes(i));if(pool.length<10){const rest=shuffle(all.filter(i=>!pool.includes(i)));pool=pool.concat(rest.slice(0,10-pool.length));seen=[]}
-  const use=shuffle(pool).slice(0,10);S.seen[mode]=seen.concat(use);ids=use.map(i=>mode+':'+i)}
- else if(mode==='mix'){SK.forEach(s=>Q[s].forEach((_,i)=>ids.push(s+':'+i)));ids=shuffle(ids).slice(0,10)}
+ if(SUBJ[mode]||mode==='mix'){const subs=SUBJ[mode]?[mode]:SK,un=[],old=[];
+  subs.forEach(s=>{const seen=S.seen[s]||[];Q[s].forEach((_,i)=>(seen.includes(i)?old:un).push(s+':'+i))});
+  ids=shuffle(un).slice(0,10);if(ids.length<10)ids=ids.concat(shuffle(old).slice(0,10-ids.length))}
  else{ids=shuffle(Object.keys(S.wrong)).slice(0,10)}
  return ids.map(id=>{const a=id.split(':');return qobj(a[0],+a[1])});
 }
@@ -989,8 +989,10 @@ function lockNext(sec){
   else b.textContent=sp?'きいてね… 🔊':'よんでね… '+Math.max(1,Math.ceil(sec-el))},250);
 }
 
+function markSeen(id){const a=id.split(':'),s=a[0],i=+a[1];if(!SUBJ[s]||!Q[s])return;let seen=(S.seen[s]||[]).filter(x=>x<Q[s].length);
+ if(!seen.includes(i))seen.push(i);if(seen.length>=Q[s].length)seen=[];S.seen[s]=seen;save()}
 function showQ(){
- const q=G.qs[G.i],n=G.qs.length;G.done=false;clearInterval(G.lockT);$('next').disabled=false;
+ const q=G.qs[G.i],n=G.qs.length;G.done=false;if(G.mode!=='review'&&!G.rv)markSeen(q.id);clearInterval(G.lockT);$('next').disabled=false;
  $('prog').textContent=(G.rv?'💥リベンジ ':'')+(G.i+1)+' / '+n+' もんめ';
  $('dots').innerHTML=G.qs.map((_,k)=>'<i class="'+(k<G.i?(G.log[k]?'ok':'ng'):k===G.i?'now':'')+'"></i>').join('');
  const su=SUBJ[q.s];$('qsubj').textContent=su.e+' '+su.n;$('qsubj').style.background=su.c;
